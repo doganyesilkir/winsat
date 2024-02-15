@@ -5,7 +5,11 @@ import os
 import ctypes
 import sys
 import time
+from docx import Document
 
+
+
+kayityolu=Document()
 
 if __name__ == "__main__":
         if ctypes.windll.shell32.IsUserAnAdmin() == 0:
@@ -28,14 +32,12 @@ try:
 except Exception as e:
     print(f"Klasör içindeki dosyalar silinirken bir hata oluştu: {e}")
 
-
+os.system("cls")
+print("Harici Terminal Kapandığında Masaüstünüzde Winsat Sonuçları Adında Bir Word Belgesi Oluşacaktır..")
 komut = "winsat formal"
 subprocess.run(komut, shell=True)
 
 
-
-print("İşlemin Tamamlanması 3 Dakika Sürecektir. Sonuçlar Geldikten Sonra Harici Terminali Kapatabilirsiniz.")
-time.sleep(3*60)
 os.system("cls")
 
 
@@ -59,18 +61,17 @@ def xml_dosyasini_parse_et(xml_dosya_yolu):
         dx10subscore = degerler.find('Dx10SubScore').text
         gamingscore = degerler.find('GamingScore').text
         diskscore = degerler.find('DiskScore').text
-        print(f"Dosya: {xml_dosya_yolu}")
-        print(f"Sistem Puanı: {systemscore} \nRam Puanı: {memoryscore} \nİşlemci Puanı: {cpuscore} \nİşlemci Genel Performans Puanı: {cpusubaggscore} \nVideo Encode Puanı: {videoencodescore} \nGrafik Puanı: {graphicsscore} \nDX9 Puanı: {dx9subscore} \nDX10 Puanı: {dx10subscore} \nOyun Puanı: {gamingscore} \nDisk Puanı: {diskscore}")
-        print("-" * 50)
+        kayityolu.add_paragraph(f"Dosya: {xml_dosya_yolu}")
+        kayityolu.add_paragraph(f"Sistem Puanı: {systemscore} \nRam Puanı: {memoryscore} \nİşlemci Puanı: {cpuscore} \nİşlemci Genel Performans Puanı: {cpusubaggscore} \nVideo Encode Puanı: {videoencodescore} \nGrafik Puanı: {graphicsscore} \nDX9 Puanı: {dx9subscore} \nDX10 Puanı: {dx10subscore} \nOyun Puanı: {gamingscore} \nDisk Puanı: {diskscore}")
+    kayityolu.save("C:\\Users\Pc\OneDrive\Masaüstü\Winsat Sonuçları.docx")
 
 kismi_isim="Formal.Assessment"
 
 dosya_yollari = find_file_with_partial_name(kismi_isim, klasor_yolu)
 if dosya_yollari:
-    print("-" * 10, "Sistem Hız Testi Sonuçları", "-" * 10)
+    kayityolu.add_paragraph("Sistem Hız Testi Sonuçları:")
     for dosya_yolu in dosya_yollari:
         xml_dosyasini_parse_et(dosya_yolu)
+        sys.exit()
 else:
     print(f"{kismi_isim} içeren dosya bulunamadı.")
-
-sys.exit()
